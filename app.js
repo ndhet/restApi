@@ -16,10 +16,6 @@ const { isAuthenticated } = require('./lib/auth');
 const { connectMongoDb } = require('./database/connect');
 const { getApikey } = require('./database/db');
 const { port } = require('./lib/settings');
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-
 
 const PORT = process.env.PORT || port;
 
@@ -107,23 +103,6 @@ app.use(function (req, res, next) {
 
 app.set('json spaces', 4);
 
-var options = {                                                                                   key: fs.readFileSync('./api.sun3haxor.my.id.key'),
-  cert: fs.readFileSync('./api.sun3haxor.my.id.crt')
-};
-
-http.createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    console.log("http request, will go to >> ");
-    console.log("https://" + req.headers['host'] + req.url );
-    res.end();
-}).listen(PORT, (err) => {
-    if (err) throw err;
-    console.log("HTTP Server running on port " + PORT);
-});
-
-
-https.createServer(options, app, () => {
-}).listen(443, (err) => {
-    if (err) throw err;
-    console.log("HTTPS Server running on port 443");
+app.listen(PORT, () => {
+  console.log(`App listening at http://localhost:${PORT}`);
 });
